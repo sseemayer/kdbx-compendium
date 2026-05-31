@@ -1,0 +1,11 @@
+[book]
+title = "KDBX compendium"
+authors = ["Stefan Seemayer"]
+language = "en"
+
+[output.html]
+mathjax-support = true
+
+[preprocessor.drawio]
+command = "mdbook-drawio"
+result-dir = "gen/drawio"
