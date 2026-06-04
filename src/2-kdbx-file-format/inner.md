@@ -63,25 +63,45 @@ Some value types have special encoding rules within the XML database, which are 
 
 There are two boolean types in the XML database - `TBool` and `TNullableBoolEx`. `TBool` values are stored as the string `True` or `False`, while `TNullableBoolEx` values are stored as `True`, `False`, or the string `Null`.
 
-Most boolean fields in the XML database are of type `TBool`, which means that an unspecified value will default to a field-specific default value. 
+Most boolean fields in the XML database are of type `TBool`, which means that an unspecified value will default to a field-specific default value.
+<sup>
+[KP](https://github.com/ralish/KeePass/blob/c238e8ee9bb62f4df4e102e67e5a731971a23852/KeePassLib/Serialization/KdbxFile.Read.Streamed.cs#L834-L842),
+[KPXC](https://github.com/keepassxreboot/keepassxc/blob/608967954c5e1de08a218a195eb28dcd39ae07aa/src/format/KdbxXmlReader.cpp#L1050-L1065)
+</sup>
 
 For `TNullableBoolEx` fields, an unspecified or `Null` value will be treated as inheriting the parent group's value. The two fields of type `TNullableBoolEx` are `EnableAutoType` and `EnableSearching`.
+<sup>
+[KP](https://github.com/ralish/KeePass/blob/c238e8ee9bb62f4df4e102e67e5a731971a23852/KeePassLib/Serialization/KdbxFile.Read.Streamed.cs#L844-L853),
+[KPXC](https://github.com/keepassxreboot/keepassxc/blob/608967954c5e1de08a218a195eb28dcd39ae07aa/src/format/KdbxXmlReader.cpp#L557-L584)
+</sup>
 
 #### Colors
 
 Colors are stored as RGB values in the format "#RRGGBB". Empty strings should be treated as default values, chosen by the application.
+<sup>
+[KP](https://github.com/ralish/KeePass/blob/c238e8ee9bb62f4df4e102e67e5a731971a23852/KeePassLib/Serialization/KdbxFile.Read.Streamed.cs#L444-L449),
+[KPXC](https://github.com/keepassxreboot/keepassxc/blob/608967954c5e1de08a218a195eb28dcd39ae07aa/src/format/KdbxXmlReader.cpp#L1088-L1116)
+</sup>
 
-**Example:** an orangeish color could be expressed as `#FF6600`.
+**Example:** an <span style="background: #ff9900; width: 1rem; height: 1rem; display: inline-block;"></span> orangeish color could be expressed as `#FF6600`.
 
 #### UUID values
 
 UUID values are stored as 128-bit unsigned integers that are base64 encoded.
+<sup>
+[KP](https://github.com/ralish/KeePass/blob/c238e8ee9bb62f4df4e102e67e5a731971a23852/KeePassLib/Serialization/KdbxFile.Read.Streamed.cs#L855-L860),
+[KPXC](https://github.com/keepassxreboot/keepassxc/blob/608967954c5e1de08a218a195eb28dcd39ae07aa/src/format/KdbxXmlReader.cpp#L1128-L1141)
+</sup>
 
-**Example:** the UUID `00010203-0405-0607-0809-0a0b0c0d0e0f` would be stored as the byte sequence `00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f`, which is base64 encoded as `AAECAwQFBgcICQoLDA0ODw==`.
+**Example:** the UUID `00010203-0405-0607-0809-0a0b0c0d0e0f` would be represented as the byte sequence `00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f`, which is base64 encoded as `AAECAwQFBgcICQoLDA0ODw==`.
 
 #### Timestamps
 
 Timestamps should be stored as seconds since the special epoch of `2000-01-01T00:00:00Z` in UTC, as a 64-bit signed integer that is base64 encoded.
+<sup>
+[KP](https://github.com/ralish/KeePass/blob/c238e8ee9bb62f4df4e102e67e5a731971a23852/KeePassLib/Serialization/KdbxFile.Read.Streamed.cs#L918-L947),
+[KPXC](https://github.com/keepassxreboot/keepassxc/blob/608967954c5e1de08a218a195eb28dcd39ae07aa/src/format/KdbxXmlReader.cpp#L1067)
+</sup>
 
 Some older versions of the KDBX format used ISO 8601 datetime strings, so parsing from this format should be supported for backward compatibility.
 
@@ -97,6 +117,17 @@ DataTransferObfuscation is an integer-valued field for entries in the XML databa
 | 1      | Use clipboard                      |
 
 ### Protected values
+
+Values in the XML database can be marked as protected with an attribute `Protected="True"`. Protected values are stored as Base64-encoded encrypted data, using the [encryption method and key specified in the inner header](#inner-encryption). There is also a `ProtectInMemory="True"` attribute, but it is only used for plaintext XML exports.
+
+While some implementations allow protections on any field
+<sup>
+[KPXC](https://github.com/keepassxreboot/keepassxc/blob/608967954c5e1de08a218a195eb28dcd39ae07aa/src/format/KdbxXmlReader.cpp#L1027-L1048)
+</sup>, the official KeePass implementation only allows the string and binary fields of entries to be protected
+<sup>
+[KP](https://github.com/ralish/KeePass/blob/c238e8ee9bb62f4df4e102e67e5a731971a23852/KeePassLib/Serialization/KdbxFile.Read.Streamed.cs#L509-L523)
+</sup>
+
 
 ### Attachment references
 
