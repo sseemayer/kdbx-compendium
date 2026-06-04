@@ -41,16 +41,42 @@ jobs:
 
       - name: Install mdBook tools
         run: |
-          cargo install mdbook --locked
-          git clone https://github.com/QBayLogic/mdbook-drawio /tmp/mdbook-drawio
-          cargo install --path /tmp/mdbook-drawio
+          # Install mdbook only if it's not already available on the runner
+          if ! command -v mdbook >/dev/null 2>&1; then
+            echo "mdbook not found - installing"
+            cargo install mdbook --locked
+          else
+            echo "mdbook already installed - skipping"
+          fi
+
+          # Install mdbook-drawio only if its binary isn't present
+          if ! command -v mdbook-drawio >/dev/null 2>&1; then
+            echo "mdbook-drawio not found - installing from source"
+            git clone https://github.com/QBayLogic/mdbook-drawio /tmp/mdbook-drawio
+            cargo install --path /tmp/mdbook-drawio
+          else
+            echo "mdbook-drawio already installed - skipping"
+          fi
 
       - name: Install draw.io
         run: |
-          sudo apt-get update
-          sudo apt-get install -y xvfb
-          curl -L -o /tmp/drawio.deb https://github.com/jgraph/drawio-desktop/releases/download/v30.0.4/drawio-amd64-30.0.4.deb
-          sudo apt-get install -y /tmp/drawio.deb
+          # Ensure Xvfb is present (required for headless drawio usage)
+          if ! command -v Xvfb >/dev/null 2>&1; then
+            echo "Xvfb not found - installing"
+            sudo apt-get update
+            sudo apt-get install -y xvfb
+          else
+            echo "Xvfb already installed - skipping"
+          fi
+
+          # Install drawio only if it's not already available
+          if ! command -v drawio >/dev/null 2>&1; then
+            echo "drawio not found - downloading and installing"
+            curl -L -o /tmp/drawio.deb https://github.com/jgraph/drawio-desktop/releases/download/v30.0.4/drawio-amd64-30.0.4.deb
+            sudo apt-get install -y /tmp/drawio.deb
+          else
+            echo "drawio already installed - skipping"
+          fi
 
       - name: Build book
         run: xvfb-run -a mdbook build
