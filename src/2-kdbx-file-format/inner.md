@@ -131,4 +131,27 @@ While some implementations allow protections on any field
 
 ### Attachment references
 
-Attachments are stored as [binary entries in the inner header](#binary-attachments), and referenced in the XML database by their ID, which is the index of the binary attachment entry in the inner header.
+In KDBX4, attachments are stored as [binary entries in the inner header](#binary-attachments), and referenced in the XML database by their ID, which is the index of the binary attachment entry in the inner header. In KDBX3, attachments are stored as Base64-encoded data with an optional `Compressed="True"` and `Protected="True"` attributes, and are not referenced by ID
+<sup>
+[KP](https://github.com/ralish/KeePass/blob/c238e8ee9bb62f4df4e102e67e5a731971a23852/KeePassLib/Serialization/KdbxFile.Read.Streamed.cs#L980-L1028),
+[KPXC](https://github.com/keepassxreboot/keepassxc/blob/608967954c5e1de08a218a195eb28dcd39ae07aa/src/format/KdbxXmlReader.cpp#L877-L924)
+</sup>.
+
+KDBX4 example:
+
+```xml
+<Binary>
+    <Key>myfile.txt</Key>
+    <Value Ref="1"/>
+</Binary>
+```
+
+KDBX3 example:
+
+```xml
+<Binary>
+    <Key>myfile.txt</Key>
+    <Value Compressed="True">H4sIAAAAAAAAA/NIzcnJVyjJyCxWAKLk/NyCotTi4tQUhZTEkkQuAFCFZIEeAAAA</Value>
+</Binary>
+```
+
