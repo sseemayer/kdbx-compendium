@@ -47,12 +47,13 @@ jobs:
 
       - name: Install draw.io
         run: |
-          curl -L -o /tmp/drawio.deb https://github.com/jgraph/drawio-desktop/releases/download/v30.0.4/drawio-amd64-30.0.4.deb
           sudo apt-get update
+          sudo apt-get install -y xvfb
+          curl -L -o /tmp/drawio.deb https://github.com/jgraph/drawio-desktop/releases/download/v30.0.4/drawio-amd64-30.0.4.deb
           sudo apt-get install -y /tmp/drawio.deb
 
       - name: Build book
-        run: mdbook build
+        run: xvfb-run -a mdbook build
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
