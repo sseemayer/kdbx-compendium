@@ -108,8 +108,8 @@ A variant dictionary is a typed key-value store used to store the parameters for
 | Byte(s)             | Type    | Description                                      | 
 |---------------------|---------|--------------------------------------------------|
 | `0`                 | UInt8   | Value type ID                                    |
-| `1-4`               | UInt32  | Key length `K`                                   |
-| `4-(5+K)`           | String  | Key                                              |
+| `1-5`               | UInt32  | Key length `K`                                   |
+| `5-(5+K)`           | String  | Key                                              |
 | `(5+K)-(5+K+4)`     | UInt32  | Value length `V`                                 |
 | `(5+K+4)-(5+K+4+V)` | Bytes   | Value (type depends on value type ID)            |
 
