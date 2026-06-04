@@ -1,1 +1,0 @@
-# KDBX version 3
