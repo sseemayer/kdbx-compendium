@@ -61,8 +61,11 @@ Some value types have special encoding rules within the XML database, which are 
 
 #### (Nullable) Booleans
 
-There are two boolean types in the XML database - `TBool` and `TNullableBoolEx`. `TBool` values are stored as the string `True` or `False`, while `TNullableBoolEx` values are stored as `True`, `False`, `true`, `false`, or the string `Null` or `null`. Be sure to check the XML schema for the correct type of boolean to use.
+There are two boolean types in the XML database - `TBool` and `TNullableBoolEx`. `TBool` values are stored as the string `True` or `False`, while `TNullableBoolEx` values are stored as `True`, `False`, or the string `Null`.
 
+Most boolean fields in the XML database are of type `TBool`, which means that an unspecified value will default to a field-specific default value. 
+
+For `TNullableBoolEx` fields, an unspecified or `Null` value will be treated as inheriting the parent group's value. The two fields of type `TNullableBoolEx` are `EnableAutoType` and `EnableSearching`.
 
 #### Colors
 
@@ -83,6 +86,15 @@ Timestamps should be stored as seconds since the special epoch of `2000-01-01T00
 Some older versions of the KDBX format used ISO 8601 datetime strings, so parsing from this format should be supported for backward compatibility.
 
 **Example:** the timestamp `2000-01-01T00:00:01Z`, one second after the epoch, would be stored as the byte sequence `01 00 00 00 00 00 00 00`, which is base64 encoded as `AQAAAAAAAA==`.
+
+### DataTransferObfuscation aka AutoTypeObfuscation
+
+DataTransferObfuscation is an integer-valued field for entries in the XML database. It corresponds to an enumeration of obfuscation methods used for AutoType:
+
+| Value  | Method                             |
+|--------|------------------------------------|
+| 0      | No obfuscation                     |
+| 1      | Use clipboard                      |
 
 ### Protected values
 
