@@ -5,6 +5,7 @@
 - [KDBX file format](./2-kdbx-file-format/index.md)
     - [Outer database](./2-kdbx-file-format/outer.md)
     - [Inner database](./2-kdbx-file-format/inner.md)
+    - [Suggestions for improvement](./2-kdbx-file-format/suggestions.md)
 
 - [Algorithms](./3-algorithms/index.md)
     - [Merging](./3-algorithms/merging.md)
