@@ -155,3 +155,32 @@ KDBX3 example:
 </Binary>
 ```
 
+### Tags
+
+Tags are stored as a single string with individual tags delimited by semicolons
+<sup>
+[KP](https://github.com/ralish/KeePass/blob/c238e8ee9bb62f4df4e102e67e5a731971a23852/KeePassLib/Utility/StrUtil.cs#L1589-L1623),
+[KP2A](https://github.com/PhilippC/keepass2android/blob/df20f34a1e5983c2d2fa515bb7c36e8904e2dc81/src/KeePassLib2Android/Utility/StrUtil.cs#L1460-L1494),
+[KPRS](https://github.com/sseemayer/keepass-rs/blob/240288fa82f9a045b961649979b9c59a3c424534/src/format/xml_db/tags.rs#L9)
+</sup>, though some implementations use commas instead
+<sup>
+[KPXC](https://github.com/keepassxreboot/keepassxc/blob/bbc28b931b3f17ff0120db4db133dac714675fd4/src/core/Entry.cpp#L196-L199),
+[KPDX](https://github.com/Kunzisoft/KeePassDX/blob/8bb87558c9b4ee76f5f9b8348b965a3232b2c0b0/database/src/main/java/com/kunzisoft/keepass/database/element/Tags.kt#L128)
+</sup>.
+
+When parsing, the string should be split by commas, semicolons, and tab characters to ensure compatibility with different implementations
+<sup>
+[KP](https://github.com/ralish/KeePass/blob/c238e8ee9bb62f4df4e102e67e5a731971a23852/KeePassLib/Utility/StrUtil.cs#L1625-L1636),
+[KPXC](https://github.com/keepassxreboot/keepassxc/blob/bbc28b931b3f17ff0120db4db133dac714675fd4/src/core/Entry.cpp#L43),
+[KP2A](https://github.com/PhilippC/keepass2android/blob/df20f34a1e5983c2d2fa515bb7c36e8904e2dc81/src/KeePassLib2Android/Utility/StrUtil.cs#L1399),
+[KPDX](https://github.com/Kunzisoft/KeePassDX/blob/8bb87558c9b4ee76f5f9b8348b965a3232b2c0b0/database/src/main/java/com/kunzisoft/keepass/database/element/Tags.kt#L130),
+[KPRS](https://github.com/sseemayer/keepass-rs/blob/240288fa82f9a045b961649979b9c59a3c424534/src/format/xml_db/tags.rs#L11-L12)
+</sup>, and whitespace around individual tags should be trimmed. Duplicates can be removed and the tags can be sorted alphabetically
+<sup>
+[KP](https://github.com/ralish/KeePass/blob/c238e8ee9bb62f4df4e102e67e5a731971a23852/KeePassLib/Utility/StrUtil.cs#L1531-L1578),
+[KPXC](https://github.com/keepassxreboot/keepassxc/blob/bbc28b931b3f17ff0120db4db133dac714675fd4/src/core/Entry.cpp#L718-L730),
+[KP2A](https://github.com/PhilippC/keepass2android/blob/df20f34a1e5983c2d2fa515bb7c36e8904e2dc81/src/KeePassLib2Android/Utility/StrUtil.cs#L1460-L1494)
+</sup>, though some implementations preserve the original order and don't remove duplicates
+<sup>
+[KPRS](https://github.com/sseemayer/keepass-rs/blob/240288fa82f9a045b961649979b9c59a3c424534/src/format/xml_db/tags.rs#L17-L22)
+</sup>.
